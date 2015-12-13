@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/zliw/asciisfx-linux.svg)](https://api.travis-ci.org/zliw/asciisfx-linux.svg)
+
 # asciisfx-linux
 
 linux-port of asciisfx in c
