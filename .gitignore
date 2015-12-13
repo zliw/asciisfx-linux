@@ -14,3 +14,9 @@ src/.dirstamp
 stamp-h1
 *.o
 asciisfx
+m4
+*.lo
+libtool
+*.la
+*~
+.libs/

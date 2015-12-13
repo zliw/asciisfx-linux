@@ -2,7 +2,15 @@
 
 linux-port of asciisfx in c
 
-to build:
+prerequisites:
+
+cmocha & libtool
+
+e.g. on debian based machines run:
+
+apt-get install libtool libcmocka-dev
+
+build:
 
 > autoreconf -i
 > ./configure

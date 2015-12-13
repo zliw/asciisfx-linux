@@ -11,5 +11,7 @@ AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror])
 AC_CONFIG_FILES([Makefile])
 
 AC_PROG_CC
+AM_PROG_AR
+AC_PROG_LIBTOOL
 
 AC_OUTPUT
