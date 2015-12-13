@@ -9,8 +9,8 @@ config.h.in
 config.log
 configure
 config.status
-src/.deps/
-src/.dirstamp
+.deps/
+.dirstamp
 stamp-h1
 *.o
 asciisfx
@@ -20,3 +20,4 @@ libtool
 *.la
 *~
 .libs/
+tests/test
