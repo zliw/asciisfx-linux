@@ -14,7 +14,7 @@ config.status
 stamp-h1
 *.o
 asciisfx
-m4
+m4/*
 *.lo
 libtool
 *.la
