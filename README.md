@@ -6,11 +6,11 @@ linux-port of asciisfx in c
 
 prerequisites:
 
-cmocha & libtool
+cmocha & libtool & alsa development files
 
 e.g. on debian based machines run:
 
-apt-get install libtool libcmocka-dev
+apt-get install libtool libcmocka-dev libasound2-dev
 
 build:
 
