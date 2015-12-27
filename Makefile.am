@@ -12,4 +12,4 @@ tests_test_CFLAGS = -I$(top_srcdir)/src
 tests_test_LDFLAGS = -lasciisfx -lcmocka
 
 lib_LTLIBRARIES = libasciisfx.la
-libasciisfx_la_SOURCES = src/arguments.c src/arguments.h
+libasciisfx_la_SOURCES = src/arguments.c src/arguments.h src/playback.c
