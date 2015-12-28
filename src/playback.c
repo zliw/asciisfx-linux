@@ -1,21 +1,9 @@
-#include <alsa/asoundlib.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
-
-#define PCM_DEVICE "default"
-#define RATE 44100
-
-struct Buffer {
-  uint32_t length;
-  float *data;
-};
+#include "playback.h"
+#include "buffer.h"
 
 uint32_t play_buffer_on_pcm_handle(struct Buffer buffer,
                                    snd_pcm_t *pcm_handle,
                                    snd_pcm_uframes_t frame_size);
-
 
 uint32_t play(struct Buffer buffer) {
     uint32_t alsa_device;
@@ -54,7 +42,7 @@ uint32_t play(struct Buffer buffer) {
     		return 0;
     }
 
-    int rate = RATE;
+    int rate = SAMPLE_RATE;
 
     if (err = snd_pcm_hw_params_set_rate_near(pcm_handle, params, &rate, 0) < 0) {
     		fprintf(stderr, "ERROR: Can't set rate. %s\n", snd_strerror(err));
