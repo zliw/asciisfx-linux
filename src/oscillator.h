@@ -6,6 +6,6 @@ struct Oscillator {
 };
 
 struct Oscillator newSinusOscillator();
-void renderOscillatorToBuffer(struct Oscillator oscillator,
-                              struct Buffer buffer);
+uint32_t renderOscillatorToBuffer(struct Oscillator oscillator,
+                                  struct Buffer buffer);
 void deleteOscillator(struct Oscillator *oscillator);
