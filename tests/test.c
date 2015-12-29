@@ -41,6 +41,13 @@ void test_new_oscillator() {
     struct Oscillator oscillator = newSinusOscillator();
     assert_non_null(oscillator.wave.data);
     assert_true(1024 == oscillator.wave.length);
+
+    assert_true(0.0 == oscillator.wave.data[0]);
+    assert_true(1.0 == oscillator.wave.data[256]);
+    assert_true(-0.01 < oscillator.wave.data[512]);
+    assert_true( 0.01 > oscillator.wave.data[512]);
+    assert_true(-1.0 == oscillator.wave.data[768]);
+
     deleteOscillator(&oscillator);
     assert_null(oscillator.wave.data);
     assert_true(0 == oscillator.wave.length);
@@ -50,6 +57,8 @@ void test_new_oscillator() {
 int main(void) {
   const UnitTest tests[] = {
     unit_test(test_getopt_config),
+    unit_test(test_new_oscillator),
+    unit_test(test_new_buffer_with_frames),
     unit_test(test_new_buffer)
   };
 
