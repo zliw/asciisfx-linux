@@ -7,59 +7,82 @@ uint32_t play_buffer_on_pcm_handle(struct Buffer buffer,
 
 uint32_t play(struct Buffer buffer) {
     uint32_t alsa_device;
-    int err;
     snd_pcm_t *pcm_handle;
     snd_pcm_hw_params_t *params;
+    int err;
 
 	  /* Open the PCM device in playback mode */
-	  if (alsa_device =  (&pcm_handle, PCM_DEVICE,
-                          					 SND_PCM_STREAM_PLAYBACK, 0) < 0) {
+	  if ((alsa_device = snd_pcm_open(&pcm_handle, PCM_DEVICE,
+                          					SND_PCM_STREAM_PLAYBACK, 0)) < 0) {
         fprintf(stderr, "ERROR: Can't open \"%s\" PCM device: %s\n",
 	              				PCM_DEVICE, snd_strerror(alsa_device));
         return 0;
     }
 
-    if (err = snd_pcm_hw_params_malloc (&params)) {
+    fprintf(stderr, "device: %d\n", alsa_device);
+
+    if ((err = snd_pcm_hw_params_malloc(&params)) < 0) {
         fprintf(stderr, "ERROR: Can't allocate hardware parameters PCM device: %s\n",
 	              			 	 snd_strerror(err));
         return 0;
     }
 
-    if (err = snd_pcm_hw_params_set_access(pcm_handle, params,
-                                 					 SND_PCM_ACCESS_RW_INTERLEAVED) < 0) {
-	   	  fprintf(stderr, "ERROR: Can't interleaved set mode. %s\n", snd_strerror(err));
+    fprintf(stderr, "hwparams malloc: %d\n", err);
+
+  	snd_pcm_hw_params_any(pcm_handle, params);
+
+    if ((err = snd_pcm_hw_params_set_access(pcm_handle, params,
+                                 					  SND_PCM_ACCESS_RW_INTERLEAVED)) < 0) {
+	   	  fprintf(stderr, "ERROR: Can't set non-interleaved mode. %s, %d\n", snd_strerror(err), err);
         return 0;
     }
 
-	  if (err = snd_pcm_hw_params_set_format(pcm_handle, params,
-	                               					 SND_PCM_FORMAT_FLOAT) < 0) {
+    fprintf(stderr, "error: %d\n", err);
+
+	  if ((err = snd_pcm_hw_params_set_format(pcm_handle, params,
+	                               					 SND_PCM_FORMAT_FLOAT)) < 0) {
     		fprintf(stderr, "ERROR: Can't set float format. %s\n", snd_strerror(err));
     		return 0;
   	}
 
-    if (err = snd_pcm_hw_params_set_channels(pcm_handle, params, 1) < 0) {
+    if ((err = snd_pcm_hw_params_set_channels(pcm_handle, params, 1)) < 0) {
     		fprintf(stderr, "ERROR: Can't set mono format. %s\n", snd_strerror(err));
     		return 0;
     }
 
     int rate = SAMPLE_RATE;
 
-    if (err = snd_pcm_hw_params_set_rate_near(pcm_handle, params, &rate, 0) < 0) {
+    if ((err = snd_pcm_hw_params_set_rate_near(pcm_handle, params, &rate, 0)) < 0) {
     		fprintf(stderr, "ERROR: Can't set rate. %s\n", snd_strerror(err));
     		return 0;
     }
 
-  	if (err = snd_pcm_hw_params(pcm_handle, params) < 0) {
+    snd_pcm_uframes_t frames = 128;
+    snd_pcm_hw_params_set_period_size_near(pcm_handle,
+                                           params, &frames, NULL);
+
+  	if ((err = snd_pcm_hw_params(pcm_handle, params)) < 0) {
     		fprintf(stderr, "ERROR: Can't set hardware parameters. %s\n", snd_strerror(err));
         return 0;
   	}
 
+  	fprintf(stderr, "sound state: %s\n", snd_pcm_state_name(snd_pcm_state(pcm_handle)));
 
     snd_pcm_uframes_t frame_size;
-    if (err = snd_pcm_hw_params_get_period_size(params, &frame_size, 0) < 0) {
+    if ((err = snd_pcm_hw_params_get_period_size(params, &frame_size, 0)) < 0) {
         fprintf(stderr, "ERROR: Can't determine frame size for current parameters. %s\n", snd_strerror(err));
         return 0;
     }
+
+    unsigned int period_time;
+    if ((err = snd_pcm_hw_params_get_period_time(params,
+                                      &period_time, NULL)) < 0) {
+        fprintf(stderr, "ERROR: Can't determine period size for current parameters. %s\n", snd_strerror(err));
+        return 0;
+
+    }
+
+    fprintf(stderr, "period time: %u\n");
 
     uint32_t result = play_buffer_on_pcm_handle(buffer, pcm_handle, frame_size);
 
@@ -76,13 +99,14 @@ uint32_t play_buffer_on_pcm_handle(struct Buffer buffer,
     uint32_t position;
     int err;
 
-    fprintf(stdout, "playback with frame size %ld\n", frame_size);
+    fprintf(stdout, "playback with frame size %lu\n", frame_size);
 
   	for (position = 0; position < buffer.length; position += frame_size, left -= buffer.length) {
   	    void *buffer_start = &buffer.data[position];
   	    uint32_t size = (left < frame_size) ? left : frame_size;
 
-    		while (err = snd_pcm_writen(pcm_handle, &buffer_start, size) == -EPIPE) {
+    		while ((err = snd_pcm_writen(pcm_handle, &buffer_start, size)) == -EPIPE) {
+	    	  	fprintf(stderr, "prepare\n");
 	  		    snd_pcm_prepare(pcm_handle);
 	  	  }
 	  	  if (err < 0) {
