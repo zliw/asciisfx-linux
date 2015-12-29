@@ -3,10 +3,8 @@
 #include "playback.h"
 
 
-
 struct Buffer newBufferWithMS(uint32_t ms) {
     struct Buffer buffer;
-
     uint32_t length = (ms * SAMPLE_RATE) / 1000;
 
     if (ms > 60000) {
@@ -15,8 +13,20 @@ struct Buffer newBufferWithMS(uint32_t ms) {
       return buffer;
     }
 
-    buffer.data = malloc(length * sizeof(float));
-    buffer.length = (buffer.data != NULL) ? length : 0;
+    return newBufferWithFrames(length);
+}
+
+struct Buffer newBufferWithFrames(uint32_t frames) {
+    struct Buffer buffer;
+
+    if (frames > 60000 * SAMPLE_RATE) {
+      buffer.data = NULL;
+      buffer.length = 0;
+      return buffer;
+    }
+
+    buffer.data = malloc(frames * sizeof(float));
+    buffer.length = (buffer.data != NULL) ? frames : 0;
 
     return buffer;
 }
