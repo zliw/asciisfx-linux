@@ -31,6 +31,13 @@ uint32_t play(struct Buffer buffer) {
 
   	snd_pcm_hw_params_any(pcm_handle, params);
 
+    err = snd_pcm_hw_params_set_rate_resample(pcm_handle, params, 1);
+    if (err < 0) {
+        printf("Resampling setup failed for playback: %s\n", snd_strerror(err));
+        return 0;
+    }
+
+
     if ((err = snd_pcm_hw_params_set_access(pcm_handle, params,
                                  					  SND_PCM_ACCESS_RW_INTERLEAVED)) < 0) {
 	   	  fprintf(stderr, "ERROR: Can't set non-interleaved mode. %s, %d\n", snd_strerror(err), err);
@@ -40,7 +47,7 @@ uint32_t play(struct Buffer buffer) {
     fprintf(stderr, "error: %d\n", err);
 
 	  if ((err = snd_pcm_hw_params_set_format(pcm_handle, params,
-	                               					 SND_PCM_FORMAT_FLOAT)) < 0) {
+	                               					 SND_PCM_FORMAT_FLOAT_LE)) < 0) {
     		fprintf(stderr, "ERROR: Can't set float format. %s\n", snd_strerror(err));
     		return 0;
   	}
@@ -57,7 +64,31 @@ uint32_t play(struct Buffer buffer) {
     		return 0;
     }
 
-    snd_pcm_uframes_t frames = 128;
+    if (rate != SAMPLE_RATE) {
+        fprintf(stderr, "rate doesn't match (requested %iHz, got %iHz)\n", SAMPLE_RATE, rate);
+        return 0;
+    }
+
+    /* set the buffer time */
+    unsigned int buffer_time = buffer.length * 1000;
+    err = snd_pcm_hw_params_set_buffer_time_near(pcm_handle, params, &buffer_time, NULL);
+    if (err < 0) {
+        fprintf(stderr, "unable to set buffer time %i for playback: %s\n", buffer_time, snd_strerror(err));
+        return 0;
+    }
+
+    fprintf(stderr, "buffer length: %u\n", buffer_time);
+
+    unsigned int buffer_size;
+    err = snd_pcm_hw_params_get_buffer_size(params, &buffer_size);
+    if (err < 0) {
+        printf("Unable to get buffer size for playback: %s\n", snd_strerror(err));
+        return err;
+    }
+
+    fprintf(stderr, "buffer length: %u\n", buffer_size);
+
+    snd_pcm_uframes_t frames = 4410;
     snd_pcm_hw_params_set_period_size_near(pcm_handle,
                                            params, &frames, NULL);
 
@@ -68,23 +99,7 @@ uint32_t play(struct Buffer buffer) {
 
   	fprintf(stderr, "sound state: %s\n", snd_pcm_state_name(snd_pcm_state(pcm_handle)));
 
-    snd_pcm_uframes_t frame_size;
-    if ((err = snd_pcm_hw_params_get_period_size(params, &frame_size, 0)) < 0) {
-        fprintf(stderr, "ERROR: Can't determine frame size for current parameters. %s\n", snd_strerror(err));
-        return 0;
-    }
-
-    unsigned int period_time;
-    if ((err = snd_pcm_hw_params_get_period_time(params,
-                                      &period_time, NULL)) < 0) {
-        fprintf(stderr, "ERROR: Can't determine period size for current parameters. %s\n", snd_strerror(err));
-        return 0;
-
-    }
-
-    fprintf(stderr, "period time: %u\n");
-
-    uint32_t result = play_buffer_on_pcm_handle(buffer, pcm_handle, frame_size);
+    uint32_t result = play_buffer_on_pcm_handle(buffer, pcm_handle, buffer_size);
 
   	snd_pcm_drain(pcm_handle);
   	snd_pcm_close(pcm_handle);
