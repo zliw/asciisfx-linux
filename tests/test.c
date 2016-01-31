@@ -1,10 +1,10 @@
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <setjmp.h>
 #include <cmocka.h>
 
 #include "arguments.h"
-#include "playback.h"
 #include "oscillator.h"
 
 

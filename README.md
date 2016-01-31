@@ -1,16 +1,21 @@
 [![Build Status](https://api.travis-ci.org/zliw/asciisfx-linux.svg)](https://api.travis-ci.org/zliw/asciisfx-linux.svg)
 
-# asciisfx-linux
+# libasciisfx
 
-linux-port of asciisfx in c
+c-port of asciisfx
 
 prerequisites:
 
-cmocha & libtool & alsa development files
+cmocka & libtool development files
 
 e.g. on debian based machines run:
 
 apt-get install libtool libcmocka-dev libasound2-dev
+
+
+on Mac OS:
+
+brew install cmocka
 
 build:
 

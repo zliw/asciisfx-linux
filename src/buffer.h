@@ -1,3 +1,8 @@
+#include <stddef.h>
+#include <stdint.h>
+
+
+#define SAMPLE_RATE 44100 
 
 struct Buffer {
   uint32_t length;

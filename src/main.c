@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "arguments.h"
-#include "playback.h"
 #include "oscillator.h"
 
 int main(int argc, char *argv[]) {
@@ -12,8 +11,6 @@ int main(int argc, char *argv[]) {
     struct Oscillator oscillator = newSinusOscillator();
 
     renderOscillatorToBuffer(oscillator, buffer);
-
-    play(buffer);
 
     return 0;
 }

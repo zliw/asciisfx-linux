@@ -1,7 +1,8 @@
 #include <stdint.h>
-#include "buffer.h"
-#include "playback.h"
+#include <stddef.h>
+#include <stdlib.h>
 
+#include "buffer.h"
 
 struct Buffer newBufferWithMS(uint32_t ms) {
     struct Buffer buffer;
