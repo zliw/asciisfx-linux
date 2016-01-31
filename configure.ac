@@ -14,6 +14,13 @@ AC_PROG_CC
 AM_PROG_AR
 AC_PROG_LIBTOOL
 
-AC_SUBST(CMOCKA_LIBS)
+PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.2, ac_cv_sndfile=1, ac_cv_sndfile=0)
+
+AC_DEFINE_UNQUOTED([HAVE_SNDFILE],${ac_cv_sndfile},
+                   [Set to 1 if you have libsndfile.])
+
+AC_SUBST(SNDFILE_CFLAGS)
+AC_SUBST(SNDFILE_LIBS)
+
 
 AC_OUTPUT

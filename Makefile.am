@@ -2,7 +2,8 @@ AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS= -I m4
 bin_PROGRAMS = asciisfx
 asciisfx_SOURCES = src/main.c
-asciisfx_LDFLAGS = -lasciisfx -lm
+asciisfx_CFLAGS = @SNDFILE_CFLAGS@ 
+asciisfx_LDFLAGS = -lasciisfx -lm @SNDFILE_LIBS@
 
 check_PROGRAMS = tests/test
 TESTS = tests/test

@@ -4,20 +4,19 @@
 
 c-port of asciisfx
 
-prerequisites:
+##Prerequisites
 
-cmocka & libtool development files
+libsndfile, cmocka & libtool development files
 
-e.g. on debian based machines run:
+###on debian based machines run:
 
-apt-get install libtool libcmocka-dev libasound2-dev
+apt-get install libtool libcmocka-dev
 
+###on Mac OS X install homebrew and run:
 
-on Mac OS:
+brew install cmocka libsndfile
 
-brew install cmocka
-
-build:
+##Build (for all platforms):
 
 > autoreconf -i
 > ./configure
