@@ -11,4 +11,5 @@ struct Buffer {
 
 struct Buffer newBufferWithMS(uint32_t ms);
 struct Buffer newBufferWithFrames(uint32_t frames);
+void writeBufferToPath(struct Buffer buffer, const char* path);
 void deleteBuffer(struct Buffer *buffer);
