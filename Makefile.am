@@ -9,7 +9,7 @@ TESTS = tests/test
 
 tests_test_SOURCES = tests/test.c
 tests_test_CFLAGS = -I$(top_srcdir)/src -I/usr/local/include
-tests_test_LDFLAGS = -L/usr/local/lib -lasciisfx -lcmocka -lm
+tests_test_LDFLAGS = -L/usr/local/lib -lasciisfx -lcmocka -lm @SNDFILE_LIBS@
 
 lib_LTLIBRARIES = libasciisfx.la
 libasciisfx_la_CFLAGS = @SNDFILE_CFLAGS@
