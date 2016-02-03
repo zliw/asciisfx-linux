@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 
     renderOscillatorToBuffer(oscillator, buffer);
 
-    writeBufferToPath(buffer, "out.wav");
+    writeBufferToPath(buffer, options.output_filename);
 
     return 0;
 }

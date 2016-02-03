@@ -9,7 +9,7 @@ void print_usage() {
 }
 
 struct ProcessOptions parse_command_line(int argc, char *argv[]) {
-    struct ProcessOptions options = {0, 0, ""};
+    struct ProcessOptions options = {0, "out.wav", ""};
 
     struct option long_options[] = {
         {"verbose", no_argument, &options.verbose, 1},

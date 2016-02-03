@@ -13,6 +13,7 @@ void test_getopt_config() {
     struct ProcessOptions options = parse_command_line(2, argv);
     assert_non_null(options.command);
     assert_string_equal(options.command, argv[1]);
+    assert_string_equal(options.output_filename, "out.wav");
 }
 
 
