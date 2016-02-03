@@ -1,11 +1,13 @@
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <setjmp.h>
 #include <cmocka.h>
 
 #include "arguments.h"
 #include "oscillator.h"
+#include "parser.h"
 
 
 void test_getopt_config() {
@@ -63,9 +65,20 @@ void test_new_oscillator() {
     assert_true(0 == oscillator.wave.length);
 }
 
+void test_parser() {
+    struct Oscillator *operations = parse("S");
+
+    assert_true(operations != NULL);
+    assert_true(operations[0].wave.data != NULL);
+    assert_true(operations[0].delete != NULL);
+    assert_true(operations[0].render != NULL);
+    assert_true(operations[1].render == NULL);
+    free(operations);
+}
 
 int main(void) {
   const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_parser),
     cmocka_unit_test(test_getopt_config),
     cmocka_unit_test(test_new_oscillator),
     cmocka_unit_test(test_new_buffer_with_frames),

@@ -3,6 +3,7 @@
 
 #include "arguments.h"
 #include "oscillator.h"
+#include "parser.h"
 
 int main(int argc, char *argv[]) {
     struct ProcessOptions options = parse_command_line(argc, argv);

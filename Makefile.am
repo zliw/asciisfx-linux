@@ -13,4 +13,4 @@ tests_test_LDFLAGS = -L/usr/local/lib -lasciisfx -lcmocka -lm @SNDFILE_LIBS@
 
 lib_LTLIBRARIES = libasciisfx.la
 libasciisfx_la_CFLAGS = @SNDFILE_CFLAGS@
-libasciisfx_la_SOURCES = src/arguments.c src/arguments.h src/buffer.c src/oscillator.c
+libasciisfx_la_SOURCES = src/arguments.c src/arguments.h src/buffer.c src/oscillator.c src/parser.c
