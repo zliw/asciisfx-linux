@@ -5,6 +5,9 @@
 
 #include "buffer.h"
 
+
+unsigned long SAMPLE_RATE = 44100;
+
 struct Buffer newBufferWithMS(uint32_t ms) {
     struct Buffer buffer;
     uint32_t length = (ms * SAMPLE_RATE) / 1000;

@@ -16,6 +16,15 @@ void test_getopt_config() {
 }
 
 
+void test_getopt_config_with_file() {
+    char* argv[] = {"test", "-o", "test.wav", "abcde"};
+    struct ProcessOptions options = parse_command_line(4, argv);
+    assert_non_null(options.command);
+    assert_string_equal(options.command, argv[3]);
+    assert_string_equal(options.output_filename, argv[2]);
+}
+
+
 void test_new_buffer() {
     struct Buffer buffer = newBufferWithMS(1000);
     assert_non_null(buffer.data);
@@ -55,12 +64,13 @@ void test_new_oscillator() {
 
 
 int main(void) {
-  const UnitTest tests[] = {
-    unit_test(test_getopt_config),
-    unit_test(test_new_oscillator),
-    unit_test(test_new_buffer_with_frames),
-    unit_test(test_new_buffer)
+  const struct CMUnitTest tests[] = {
+    cmocka_unit_test(test_getopt_config),
+    cmocka_unit_test(test_new_oscillator),
+    cmocka_unit_test(test_new_buffer_with_frames),
+    cmocka_unit_test(test_new_buffer),
+    cmocka_unit_test(test_getopt_config_with_file)
   };
 
-  return run_tests(tests);
+  return cmocka_run_group_tests(tests, NULL, NULL);
 }

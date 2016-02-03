@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 
-#define SAMPLE_RATE 44100 
+extern unsigned long SAMPLE_RATE;
 
 struct Buffer {
   uint32_t length;
