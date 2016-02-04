@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <sndfile.h>
 
 #include "buffer.h"
 
@@ -34,18 +33,6 @@ struct Buffer newBufferWithFrames(uint32_t frames) {
     buffer.length = (buffer.data != NULL) ? frames : 0;
 
     return buffer;
-}
-
-void writeBufferToPath(struct Buffer buffer, const char* path) {
-    SF_INFO sfinfo;
-    sfinfo.channels = 1;
-    sfinfo.samplerate = SAMPLE_RATE;
-    sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16;
-
-    SNDFILE * outfile = sf_open(path, SFM_WRITE, &sfinfo);
-    sf_count_t count = sf_write_float(outfile, buffer.data, buffer.length);
-    sf_write_sync(outfile);
-    sf_close(outfile);
 }
 
 void deleteBuffer(struct Buffer *buffer) {

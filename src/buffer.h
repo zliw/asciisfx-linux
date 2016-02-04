@@ -25,7 +25,6 @@ typedef struct Buffer Buffer;
 
 Buffer newBufferWithMS(uint32_t ms);
 Buffer newBufferWithFrames(uint32_t frames);
-void writeBufferToPath(Buffer buffer, const char* path);
 void deleteBuffer(Buffer *buffer);
 
 #endif

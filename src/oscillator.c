@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "oscillator.h"
 
@@ -25,7 +26,12 @@ uint32_t renderOscillatorToBuffer(BufferOperation self,
     float value;
     float f = 220.0;
 
-    for (i = 0; i < buffer.length; i++) {
+    // only fill up to buffer length. if self.length is shorter only fill there
+    uint32_t max = buffer.length;
+    uint32_t length = self.length_in_ms * SAMPLE_RATE / 1000;
+    max = (max < length) ? max : length;
+
+    for (i = 0; i < max; i++) {
         //f = frequency[i];
         if (f == 0) {
             buffer.data[i] = 0;
@@ -51,7 +57,7 @@ BufferOperation newSinusOscillator() {
     BufferOperation oscillator;
 
     strncpy(oscillator.name, "sinus", 8);
-    oscillator.length_in_ms = 1000;
+    oscillator.length_in_ms = 100;
     oscillator.is_generator = 1;
     oscillator.wave = newBufferWithFrames(1024);
     oscillator.render = renderOscillatorToBuffer;

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "parser.h"
 #include "oscillator.h"
@@ -12,16 +13,16 @@ BufferOperation *parse(const char* command) {
     while (index < strlen(command)) {
       char current = command[index];
 
+      fprintf(stderr, "found character '%c'\n", current);
       switch (current) {
         case 0:
             break;
         case 'S':
-            fprintf(stderr, "found character %c\n", current);
             operations[operation_index] = newSinusOscillator();
             operation_index++;
             break;
         default:
-        free(operations);
+            free(operations);
             return NULL;
       }
       index++;
