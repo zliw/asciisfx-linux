@@ -5,6 +5,32 @@
 #include "parser.h"
 #include "oscillator.h"
 
+
+uint32_t parse_integer(const char* string, uint16_t *value) {
+    uint32_t index = 0;
+
+    *value = 0;
+
+    while (index < strlen(string)) {
+        char c = string[index];
+
+        if ((c >= '0') && (c <= '9')) {
+            uint32_t v = c - '0';
+
+            if (value == 0) {
+                *value = v;
+            } else {
+                *value = *value * 10 + v;
+            }
+            index++;
+        }
+        else {
+            break;
+        }
+    }
+    return index;
+}
+
 BufferOperation *parse(const char* command) {
     BufferOperation *operations = malloc(sizeof(BufferOperation) * 2);
     uint32_t index = 0;
@@ -20,9 +46,13 @@ BufferOperation *parse(const char* command) {
         case 'S':
             index++;
             switch(command[index]) {
-                case 'I':
-                    operations[operation_index] = newSinusOscillator();
+                case 'I': {
+                    BufferOperation operation = newSinusOscillator();
+                    uint32_t offset = parse_integer(&command[index + 1], &operation.length_in_ms);
+                    index += offset;
+                    operations[operation_index] = operation;
                     break;
+                }
                 default:
                     goto ERROR;
             }
