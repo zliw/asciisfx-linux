@@ -66,7 +66,7 @@ void test_new_oscillator() {
 }
 
 void test_parser() {
-    BufferOperation *operations = parse("S");
+    BufferOperation *operations = parse("SI");
 
     assert_true(operations != NULL);
     assert_true(operations[0].wave.data != NULL);
