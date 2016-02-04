@@ -7,13 +7,14 @@
 extern unsigned long SAMPLE_RATE;
 
 struct Buffer {
-  uint32_t length;
+  uint32_t length;  //length in samples/floats
   float *data;
 };
 
 struct BufferOperation {
   char name[8];
   struct Buffer wave;
+  uint16_t length_in_ms;
   uint16_t is_generator;
   uint32_t (*render)(struct BufferOperation, struct Buffer);
   void (*delete)(struct BufferOperation *oscillator);

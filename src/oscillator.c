@@ -41,13 +41,18 @@ uint32_t renderOscillatorToBuffer(BufferOperation self,
     return 1;
 }
 
+
 void deleteOscillator(BufferOperation *oscillator) {
     deleteBuffer(&oscillator->wave);
 }
 
+
 BufferOperation newSinusOscillator() {
     BufferOperation oscillator;
+
     strncpy(oscillator.name, "sinus", 8);
+    oscillator.length_in_ms = 1000;
+    oscillator.is_generator = 1;
     oscillator.wave = newBufferWithFrames(1024);
     oscillator.render = renderOscillatorToBuffer;
     oscillator.delete = deleteOscillator;
@@ -62,5 +67,3 @@ BufferOperation newSinusOscillator() {
 
     return oscillator;
 }
-
-
