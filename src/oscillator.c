@@ -53,15 +53,23 @@ void deleteOscillator(BufferOperation *oscillator) {
 }
 
 
-BufferOperation newSinusOscillator() {
+BufferOperation newWavetableOscillator() {
     BufferOperation oscillator;
 
-    strncpy(oscillator.name, "sinus", 8);
     oscillator.length_in_ms = 100;
     oscillator.is_generator = 1;
     oscillator.wave = newBufferWithFrames(1024);
     oscillator.render = renderOscillatorToBuffer;
     oscillator.delete = deleteOscillator;
+
+    return oscillator;
+}
+
+
+BufferOperation newSinusOscillator() {
+    BufferOperation oscillator = newWavetableOscillator();
+
+    strncpy(oscillator.name, "sinus", 8);
 
     float *data = oscillator.wave.data;
     float length = (float) oscillator.wave.length;
@@ -70,6 +78,22 @@ BufferOperation newSinusOscillator() {
     for (i = 0; i < oscillator.wave.length; i++) {
         data[i] = sinf(((float) i) / length * 2 * M_PI);
     }
+
+    return oscillator;
+}
+
+
+BufferOperation newSquareOscillator() {
+    BufferOperation oscillator = newWavetableOscillator();
+
+    strncpy(oscillator.name, "square", 8);
+
+    float *data = oscillator.wave.data;
+    float length = (float) oscillator.wave.length;
+    uint32_t i;
+
+    for (i = 0; i < oscillator.wave.length / 2; i++) data[i] = 1;
+    for (i; i < oscillator.wave.length; i++) data[i] = -1;
 
     return oscillator;
 }

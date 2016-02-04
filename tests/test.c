@@ -65,12 +65,10 @@ void test_new_oscillator() {
     assert_true(0 == oscillator.wave.length);
 }
 
-void test_parser_with_sinus_oscillator() {
-    BufferOperation *operations = parse("SI2000");
-
+void check_single_default_operation(BufferOperation *operations) {
     assert_true(operations != NULL);
     assert_true(operations[0].wave.data != NULL);
-    assert_true(operations[0].length_in_ms == 2000);
+    assert_true(operations[0].length_in_ms == 1000);
     assert_true(operations[0].delete != NULL);
     assert_true(operations[0].render != NULL);
 
@@ -79,9 +77,14 @@ void test_parser_with_sinus_oscillator() {
     free(operations);
 }
 
+void test_parser_with_oscillators() {
+    check_single_default_operation(parse("SI1000"));
+    check_single_default_operation(parse("SQ1000"));
+}
+
 int main(void) {
   const struct CMUnitTest tests[] = {
-    cmocka_unit_test(test_parser_with_sinus_oscillator),
+    cmocka_unit_test(test_parser_with_oscillators),
     cmocka_unit_test(test_getopt_config),
     cmocka_unit_test(test_new_oscillator),
     cmocka_unit_test(test_new_buffer_with_frames),

@@ -31,6 +31,7 @@ uint32_t parse_integer(const char* string, uint16_t *value) {
     return index;
 }
 
+
 BufferOperation *parse(const char* command) {
     BufferOperation *operations = malloc(sizeof(BufferOperation) * 2);
     uint32_t index = 0;
@@ -43,23 +44,31 @@ BufferOperation *parse(const char* command) {
       switch (current) {
         case 0:
             break;
-        case 'S':
+        case 'S': {
+            BufferOperation operation;
+
             index++;
             switch(command[index]) {
                 case 'I': {
-                    BufferOperation operation = newSinusOscillator();
-                    uint32_t offset = parse_integer(&command[index + 1], &operation.length_in_ms);
-                    index += offset;
-                    operations[operation_index] = operation;
+                    operation = newSinusOscillator();
+                    break;
+                }
+                case 'Q': {
+                    operation = newSquareOscillator();
                     break;
                 }
                 default:
                     goto ERROR;
             }
 
-            index++;
-            operation_index++;
+            uint16_t duration = 0;
+            uint32_t offset = parse_integer(&command[index + 1], &duration);
+            index += offset + 1;
+            operation.length_in_ms = duration;
+            operations[operation_index++] = operation;
+
             break;
+        }
         default:
             goto ERROR;
       }
