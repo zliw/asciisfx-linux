@@ -12,16 +12,22 @@ libsndfile, cmocka & libtool development files
 
 ###on Debian based machines run:
 
+```
 apt-get install libtool libcmocka-dev
+```
 
 ###on Mac OS X install homebrew and run:
 
+```
 brew install cmocka libsndfile
+```
 
 ##Build (for all platforms):
 
-> autoreconf -i
-> ./configure
-> make
+```
+autoreconf -i
+./configure
+make
+```
 
 
