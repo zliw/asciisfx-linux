@@ -4,8 +4,8 @@
 #include "parser.h"
 #include "oscillator.h"
 
-struct Oscillator *parse(const char* command) {
-    struct Oscillator *operations = malloc(sizeof(struct Oscillator) * 2);
+BufferOperation *parse(const char* command) {
+    BufferOperation *operations = malloc(sizeof(BufferOperation) * 2);
     uint32_t index = 0;
     uint32_t operation_index = 0;
 

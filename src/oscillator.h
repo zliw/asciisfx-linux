@@ -1,18 +1,11 @@
-#include "buffer.h"
-
 #ifndef OSCILLATOR_H
 #define OSCILLATOR_H
 
-struct Oscillator {
-  char name[8];
-  struct Buffer wave;
-  uint32_t (*render)(struct Oscillator, struct Buffer);
-  void (*delete)(struct Oscillator *oscillator);
-};
+#include "buffer.h"
 
-struct Oscillator newSinusOscillator();
-uint32_t renderOscillatorToBuffer(struct Oscillator oscillator,
-                                  struct Buffer buffer);
-void deleteOscillator(struct Oscillator *oscillator);
+BufferOperation newSinusOscillator();
+uint32_t renderOscillatorToBuffer(BufferOperation oscillator,
+                                  Buffer buffer);
+void deleteOscillator(BufferOperation *oscillator);
 
 #endif

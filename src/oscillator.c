@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+
 #include "oscillator.h"
 
-uint32_t renderOscillatorToBuffer(struct Oscillator self,
-                                  struct Buffer buffer) {
+uint32_t renderOscillatorToBuffer(BufferOperation self,
+                                  Buffer buffer) {
 
     if (buffer.length == 0) {
         return 0;
@@ -39,12 +41,12 @@ uint32_t renderOscillatorToBuffer(struct Oscillator self,
     return 1;
 }
 
-void deleteOscillator(struct Oscillator *oscillator) {
+void deleteOscillator(BufferOperation *oscillator) {
     deleteBuffer(&oscillator->wave);
 }
 
-struct Oscillator newSinusOscillator() {
-    struct Oscillator oscillator;
+BufferOperation newSinusOscillator() {
+    BufferOperation oscillator;
     strncpy(oscillator.name, "sinus", 8);
     oscillator.wave = newBufferWithFrames(1024);
     oscillator.render = renderOscillatorToBuffer;

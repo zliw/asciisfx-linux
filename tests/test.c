@@ -29,7 +29,7 @@ void test_getopt_config_with_file() {
 
 
 void test_new_buffer() {
-    struct Buffer buffer = newBufferWithMS(1000);
+    Buffer buffer = newBufferWithMS(1000);
     assert_non_null(buffer.data);
     assert_true(SAMPLE_RATE == buffer.length);
     deleteBuffer(&buffer);
@@ -40,7 +40,7 @@ void test_new_buffer() {
 
 
 void test_new_buffer_with_frames() {
-    struct Buffer buffer = newBufferWithFrames(1024);
+    Buffer buffer = newBufferWithFrames(1024);
     assert_non_null(buffer.data);
     assert_true(1024 == buffer.length);
     deleteBuffer(&buffer);
@@ -50,7 +50,7 @@ void test_new_buffer_with_frames() {
 
 
 void test_new_oscillator() {
-    struct Oscillator oscillator = newSinusOscillator();
+    BufferOperation oscillator = newSinusOscillator();
     assert_non_null(oscillator.wave.data);
     assert_true(1024 == oscillator.wave.length);
 
@@ -66,7 +66,7 @@ void test_new_oscillator() {
 }
 
 void test_parser() {
-    struct Oscillator *operations = parse("S");
+    BufferOperation *operations = parse("S");
 
     assert_true(operations != NULL);
     assert_true(operations[0].wave.data != NULL);

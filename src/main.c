@@ -8,12 +8,14 @@
 int main(int argc, char *argv[]) {
     struct ProcessOptions options = parse_command_line(argc, argv);
 
-    struct Buffer buffer = newBufferWithMS(1000);
-    struct Oscillator oscillator = newSinusOscillator();
+    Buffer buffer = newBufferWithMS(1000);
+    BufferOperation oscillator = newSinusOscillator();
 
-    renderOscillatorToBuffer(oscillator, buffer);
+    oscillator.render(oscillator, buffer);
 
     writeBufferToPath(buffer, options.output_filename);
+
+    oscillator.delete(&oscillator);
 
     return 0;
 }
