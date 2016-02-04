@@ -10,11 +10,12 @@
 #include "parser.h"
 
 
-uint16_t file_exists(char * path) {
+uint16_t file_exists(const char * path) {
    struct stat buffer;
    int i = stat(path, &buffer);
    return (i == 0);
 }
+
 
 void writeBufferToPath(struct Buffer buffer, const char* path) {
     SF_INFO sfinfo;

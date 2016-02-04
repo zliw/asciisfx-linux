@@ -18,15 +18,34 @@ BufferOperation *parse(const char* command) {
         case 0:
             break;
         case 'S':
-            operations[operation_index] = newSinusOscillator();
+            index++;
+            switch(command[index]) {
+                case 'I':
+                    operations[operation_index] = newSinusOscillator();
+                    break;
+                default:
+                    goto ERROR;
+            }
+
+            index++;
             operation_index++;
             break;
         default:
-            free(operations);
-            return NULL;
+            goto ERROR;
       }
-      index++;
     }
 
     return operations;
+ERROR:
+    fprintf(stderr, "parse error at index %d: \n", index);
+    char current = command[index];
+    if (current == 0) {
+        fprintf(stderr, "unexpected end of command\n");
+    }
+    else {
+        fprintf(stderr, "unexpected character: '%c'\n", current);
+    }
+
+    free(operations);
+    return NULL;
 }
