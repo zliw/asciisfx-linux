@@ -32,6 +32,45 @@ uint32_t parse_integer(const char* string, uint16_t *value) {
 }
 
 
+uint32_t parse_notes(const char*string, Note **sequence) {
+
+    uint32_t index = 0;
+    uint8_t octave = 4;
+    uint8_t is_slide = 0;
+    Note note;
+
+    *sequence = NULL;
+
+    while (index < strlen(string)) {
+        char c = string[index];
+        if ((c >= '0') && (c <= '9')) {
+            note.length = c - '0';
+        }
+        else if ((c >= 'a') && (c <= 'g')) {
+        }
+        else if (c == '.') {
+            
+        }
+        else if (c == '/') {
+            is_slide = 1;
+        }
+        else if (c == '+') {
+            
+        }
+        else if (c == '-') {
+            
+        }
+        else {
+            return index;
+        }
+
+        index++;
+    }
+
+    return index;
+}
+
+
 BufferOperation *parse(const char* command) {
     BufferOperation *operations = malloc(sizeof(BufferOperation) * 2);
     uint32_t index = 0;
@@ -64,6 +103,10 @@ BufferOperation *parse(const char* command) {
             uint16_t duration = 0;
             uint32_t offset = parse_integer(&command[index + 1], &duration);
             index += offset + 1;
+
+            Note *sequence = NULL;
+            index += parse_notes(&command[index], &sequence);
+
             operation.length_in_ms = duration;
             operations[operation_index++] = operation;
 

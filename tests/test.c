@@ -65,6 +65,7 @@ void test_new_oscillator() {
     assert_true(0 == oscillator.wave.length);
 }
 
+
 void check_single_default_operation(BufferOperation *operations) {
     assert_true(operations != NULL);
     assert_true(operations[0].wave.data != NULL);
@@ -77,10 +78,13 @@ void check_single_default_operation(BufferOperation *operations) {
     free(operations);
 }
 
+
 void test_parser_with_oscillators() {
     check_single_default_operation(parse("SI1000"));
     check_single_default_operation(parse("SQ1000"));
+    check_single_default_operation(parse("SQ1000a"));
 }
+
 
 int main(void) {
   const struct CMUnitTest tests[] = {
