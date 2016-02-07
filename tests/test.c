@@ -9,6 +9,8 @@
 #include "oscillator.h"
 #include "parser.h"
 
+uint32_t parse_hex(const char* string, uint16_t *value);
+
 
 void test_getopt_config() {
     char* argv[] = {"test", "abcde"};
@@ -85,6 +87,41 @@ void test_parser_with_oscillators() {
     check_single_default_operation(parse("SQ1000a"));
 }
 
+void test_parse_hex() {
+    uint16_t value = 0;
+    uint32_t index = parse_hex("abA", &value);
+    assert_true(value == 171);
+    assert_true(index == 2);
+
+    index = parse_hex("a00x", &value);
+    assert_true(value == 2048 + 512);
+    assert_true(index == 3);
+
+    index = parse_hex("a00x", &value);
+    assert_true(value == 2048 + 512);
+    assert_true(index == 3);
+
+    index = parse_hex("00ax", &value);
+    assert_true(value == 10);
+    assert_true(index == 3);
+}
+
+
+void test_parse_hex_with_null_values() {
+    uint16_t value = 0;
+    uint32_t index = parse_hex("", &value);
+    assert_true(value == 0);
+    assert_true(index == 0);
+
+    index = parse_hex("A", &value);
+    assert_true(value == 0);
+    assert_true(index == 0);
+
+    index = parse_hex("00x", &value);
+    assert_true(value == 0);
+    assert_true(index == 2);
+}
+
 
 int main(void) {
   const struct CMUnitTest tests[] = {
@@ -93,6 +130,8 @@ int main(void) {
     cmocka_unit_test(test_new_oscillator),
     cmocka_unit_test(test_new_buffer_with_frames),
     cmocka_unit_test(test_new_buffer),
+    cmocka_unit_test(test_parse_hex),
+    cmocka_unit_test(test_parse_hex_with_null_values),
     cmocka_unit_test(test_getopt_config_with_file)
   };
 

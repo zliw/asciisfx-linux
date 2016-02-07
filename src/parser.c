@@ -6,6 +6,44 @@
 #include "oscillator.h"
 
 
+//only accepts lower case a-f, breaks on A-F
+uint32_t parse_hex(const char* string, uint16_t *value) {
+    uint32_t index = 0;
+
+    *value = 0;
+
+    while (index < strlen(string)) {
+        char c = string[index];
+
+        if ((c >= '0') && (c <= '9')) {
+            uint32_t v = c - '0';
+
+            if (value == 0) {
+                *value = v;
+            } else {
+                *value = *value * 16 + v;
+            }
+            index++;
+        }
+        else if ((c >= 'a') && (c <= 'f')) {
+            uint32_t v = 10 + c - 'a';
+
+            if (value == 0) {
+                *value = v;
+            } else {
+                *value = *value * 16 + v;
+            }
+            index++;
+            
+        }
+        else {
+            break;
+        }
+    }
+    return index;
+}
+
+
 uint32_t parse_integer(const char* string, uint16_t *value) {
     uint32_t index = 0;
 
